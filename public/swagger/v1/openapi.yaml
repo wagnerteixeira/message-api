@@ -1,0 +1,47 @@
+openapi: 3.0.0
+servers:
+  - url: https://message-api.dev.net
+    description: Development server
+  - url: https://message-api.hml.net
+    description: Homologation server
+  - url: https://message-api.prd.net
+    description: Production server
+info:
+  description: |
+    Open API specification.
+    ## Authentication
+    To authenticate on protected routes, an **access_token** issued on the **auth route** must be sent on the **Authorization** header in the format: **Bearer {{acessToken}}**.
+  version: 1.0.0
+  title: Message Api
+tags:
+  - name: Messages
+paths:
+  /api/messages:
+    post:
+      summary: Send Messages
+      tags:
+        - Messages
+      responses:
+        200:
+          description: Messages Send
+components:
+  responses:
+    BadRequest:
+      description: Invalid request payload.
+      content:
+        application/json:
+          schema:
+            oneOf:
+              - $ref: '#/components/schemas/Error'
+              - type: array
+                items:
+                  $ref: '#/components/schemas/Error'
+          examples:
+            'Single error':
+              value:
+                code: '00.01'
+                message: "Required property 'example' is missing."
+            'Many errors':
+              value:
+                - code: '00.01'
+                  message: "Required property 'example' is missing."
